@@ -48,6 +48,7 @@ const BillsTable: React.FC = () => {
         return `${day}th`;
     }
   };
+  console.log("state", state.listOfBills);
 
   return (
     <Accordion allowToggle allowMultiple w="100%">
