@@ -1,13 +1,12 @@
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
-import { Home } from "./pages";
-import { PayDown } from "./pages/PayDown";
+import { Bills, Home } from "./pages";
 
 function App() {
   return (
     <Switch>
-      <Route exact path="/paydown">
-        <PayDown />
+      <Route exact path="/bills">
+        <Bills />
       </Route>
       <Route path="/">
         <Home />

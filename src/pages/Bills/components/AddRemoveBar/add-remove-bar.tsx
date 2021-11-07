@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import * as React from "react";
-import AddModal from "./add-modal";
+import AddModal from "../AddBillModal/add-bill-modal";
 
 const AddRemoveBar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);

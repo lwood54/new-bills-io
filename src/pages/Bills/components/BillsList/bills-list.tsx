@@ -8,22 +8,34 @@ import {
   Stat,
   StatLabel,
   StatNumber,
-  StatHelpText,
-  StatArrow,
-  StatGroup,
-  Box,
   HStack,
   IconButton,
   Text,
   VStack,
   Divider,
 } from "@chakra-ui/react";
-import { css } from "@emotion/react";
+import axios from "axios";
 import * as React from "react";
-import { BillsContext } from "../../../contexts/bills-list-context";
+import { getDaySuffix } from "../../../../helpers/helpers";
+import { Bill, tempId } from "../../types";
 
 const BillsTable: React.FC = () => {
-  const { state } = React.useContext(BillsContext);
+  const [bills, setBills] = React.useState<Bill[]>([]);
+
+  const getBills = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3001/api/user/${tempId}/bills`
+      );
+      setBills(res.data.bills);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    getBills();
+  }, []);
 
   const handleEdit = () => {
     console.log("editing item");
@@ -33,29 +45,12 @@ const BillsTable: React.FC = () => {
     console.log("removing item");
   };
 
-  const getDaySuffix = (day: number) => {
-    const stNumbers = [1, 21, 31];
-    const ndNumbers = [2, 22];
-    const rdNumbers = [3, 23];
-    switch (true) {
-      case stNumbers.find((num) => num === day) === day:
-        return `${day}st`;
-      case ndNumbers.find((num) => num === day) === day:
-        return `${day}nd`;
-      case rdNumbers.find((num) => num === day) === day:
-        return `${day}rd`;
-      default:
-        return `${day}th`;
-    }
-  };
-  console.log("state", state.listOfBills);
-
   return (
     <Accordion allowToggle allowMultiple w="100%">
-      {state.listOfBills.map((bill, i) => {
+      {bills.map((bill: Bill, i) => {
         return (
           <AccordionItem
-            key={bill.uuid}
+            key={bill._id}
             bg={i % 2 === 0 ? "teal.100" : "gray.100"}
           >
             <AccordionButton textAlign="left">
@@ -71,7 +66,7 @@ const BillsTable: React.FC = () => {
               <VStack>
                 <HStack w="100%" justifyContent="space-between">
                   <Text fontSize="sm" color="gray.600">
-                    Due on the {getDaySuffix(bill.dueDate)} of the month
+                    Due on the {getDaySuffix(bill.dayDue)} of the month
                   </Text>
                   <HStack>
                     <IconButton
@@ -91,7 +86,7 @@ const BillsTable: React.FC = () => {
                   </HStack>
                 </HStack>
                 <HStack w="100%" color="gray.700" height="50">
-                  <Text>Default monthly payment: ${bill.defaulPayment}</Text>
+                  <Text>Default monthly payment: ${bill.defaultPayment}</Text>
                   <Divider orientation="vertical" />
                   <Text>Interest: {bill.interest}%</Text>
                 </HStack>

@@ -5,8 +5,8 @@ export interface Bill {
   name: string;
   balance: number;
   interest: number;
-  defaulPayment: number;
-  dueDate: number;
+  defaultPayment: number;
+  dayDue: number;
   uuid: string;
 }
 
