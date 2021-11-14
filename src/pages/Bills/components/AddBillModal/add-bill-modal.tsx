@@ -22,25 +22,30 @@ import { Bill, tempId } from "../../types";
 interface AddModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onAddBill: (payload: Bill) => void;
 }
-const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
+const AddBillModal: React.FC<AddModalProps> = ({
+  isOpen,
+  onAddBill,
+  onClose,
+}) => {
   const { control, handleSubmit } = useFormContext<Bill>();
 
-  const addUser = async (payload: Bill) => {
-    try {
-      const res = await axios.put(
-        `http://localhost:3001/api/user/${tempId}/add-bill`,
-        payload
-      );
-      console.log("res", res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const addBill = async (payload: Bill) => {
+  //   try {
+  //     const res = await axios.put(
+  //       `http://localhost:3001/api/user/${tempId}/add-bill`,
+  //       payload
+  //     );
+  //     console.log("res", res.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleFormSubmit = (payload: Bill) => {
     try {
-      addUser(payload);
+      onAddBill(payload);
       onClose();
     } catch (error) {
       console.error(error);
@@ -122,4 +127,4 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default AddModal;
+export default AddBillModal;

@@ -14,35 +14,33 @@ import {
   VStack,
   Divider,
 } from "@chakra-ui/react";
-import axios from "axios";
 import * as React from "react";
 import { getDaySuffix } from "../../../../helpers/helpers";
-import { Bill, tempId } from "../../types";
+import { Bill } from "../../types";
 
-const BillsTable: React.FC = () => {
-  const [bills, setBills] = React.useState<Bill[]>([]);
+interface BillsListProps {
+  bills: Bill[];
+  onRemoveBill: (id?: string) => void;
+}
 
-  const getBills = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:3001/api/user/${tempId}/bills`
-      );
-      setBills(res.data.bills);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const BillsList: React.FC<BillsListProps> = ({ bills, onRemoveBill }) => {
+  // const [bills, setBills] = React.useState<Bill[]>([]);
 
-  React.useEffect(() => {
-    getBills();
-  }, []);
+  // const getBillsList = async (userId: string) => {
+  //   try {
+  //     const res = await getBills(userId);
+  //     setBills(res.data.bills);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // React.useEffect(() => {
+  //   getBillsList(tempId);
+  // }, []);
 
   const handleEdit = () => {
     console.log("editing item");
-  };
-
-  const handleRemove = () => {
-    console.log("removing item");
   };
 
   return (
@@ -80,7 +78,7 @@ const BillsTable: React.FC = () => {
                       size="sm"
                       aria-label="Remove bill"
                       icon={<DeleteIcon />}
-                      onClick={handleRemove}
+                      onClick={() => onRemoveBill(bill._id)}
                       colorScheme="red"
                     />
                   </HStack>
@@ -99,4 +97,4 @@ const BillsTable: React.FC = () => {
   );
 };
 
-export default BillsTable;
+export default BillsList;
